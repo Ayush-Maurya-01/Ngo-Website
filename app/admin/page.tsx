@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect, useMemo } from "react";
 import { supabase } from "@/lib/supabase";
+import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 import 'react-quill-new/dist/quill.snow.css';
 
@@ -125,6 +126,7 @@ interface ResourceItem {
 }
 
 export default function AdminDashboard() {
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState("overview");
   const [volunteerSubTab, setVolunteerSubTab] = useState<"ngo" | "event">("ngo");
   const [stats, setStats] = useState<DashboardStats>({
@@ -171,8 +173,15 @@ export default function AdminDashboard() {
   }), []);
 
   useEffect(() => {
+    const checkUser = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        router.push("/admin/login");
+      }
+    };
+    checkUser();
     fetchData();
-  }, [activeTab, volunteerSubTab]);
+  }, [activeTab, volunteerSubTab, router]);
 
   const fetchData = async () => {
     setLoading(true);
@@ -451,6 +460,11 @@ export default function AdminDashboard() {
     { id: 'state_events', name: 'State Initiatives', icon: '📍' },
   ];
 
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    router.push("/admin/login");
+  };
+
   return (
     <div className="flex h-screen bg-slate-950 text-slate-100 font-sans">
 
@@ -493,6 +507,12 @@ export default function AdminDashboard() {
             <div className="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center text-sm font-bold border border-slate-700">
               AD
             </div>
+            <button 
+              onClick={handleLogout}
+              className="px-4 py-2 bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold rounded-xl transition-all shadow-lg shadow-rose-900/20 active:scale-95 flex items-center"
+            >
+              <span className="mr-2">🚪</span> Sign Out
+            </button>
           </div>
         </header>
 
