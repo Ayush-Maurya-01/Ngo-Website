@@ -131,7 +131,10 @@ export const translations = {
     contact_address: "Address",
     contact_address_val: "Delhi, India",
     contact_email_label: "Email",
+    contact_email_val: "support@possiblecentre.com",
     contact_phone_label: "Phone",
+    contact_phone_val: "+91 88822 11155",
+    contact_phone_href: "tel:+918882211155",
 
     // Donate Page
     donate_title: "Make a Difference Today",
@@ -424,7 +427,10 @@ export const translations = {
     contact_address: "पता",
     contact_address_val: "दिल्ली, भारत",
     contact_email_label: "ईमेल",
+    contact_email_val: "support@possiblecentre.com",
     contact_phone_label: "फोन",
+    contact_phone_val: "+91 88822 11155",
+    contact_phone_href: "tel:+918882211155",
 
     // Donate Page
     donate_title: "आज बदलाव लाएं",

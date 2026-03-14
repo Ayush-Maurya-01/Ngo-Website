@@ -97,7 +97,7 @@ export default function ContactClient() {
                   </div>
                   <div className="ml-5">
                     <h3 className="text-lg font-bold text-slate-900">{t("contact_email_label")}</h3>
-                    <a href="mailto:support@possiblecentre.com" className="text-slate-600 mt-1 text-lg hover:text-primary-600 transition-colors">support@possiblecentre.com</a>
+                    <a href={`mailto:${t("contact_email_val")}`} className="text-slate-600 mt-1 text-lg hover:text-primary-600 transition-colors">{t("contact_email_val")}</a>
                   </div>
                 </div>
 
@@ -111,7 +111,7 @@ export default function ContactClient() {
                   </div>
                   <div className="ml-5">
                     <h3 className="text-lg font-bold text-slate-900">{t("contact_phone_label")}</h3>
-                    <a href="tel:+918882211155" className="text-slate-600 mt-1 text-lg hover:text-primary-600 transition-colors">+91 88822 11155</a>
+                    <a href={t("contact_phone_href")} className="text-slate-600 mt-1 text-lg hover:text-primary-600 transition-colors">{t("contact_phone_val")}</a>
                   </div>
                 </div>
               </div>
