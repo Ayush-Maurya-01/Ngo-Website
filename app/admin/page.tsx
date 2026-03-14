@@ -1,5 +1,4 @@
 "use client";
-
 import { useState, useEffect, useMemo } from "react";
 import { supabase } from "@/lib/supabase";
 import dynamic from "next/dynamic";
@@ -146,7 +145,7 @@ export default function AdminDashboard() {
   const [services, setServices] = useState<ServiceItem[]>([]);
   const [resources, setResources] = useState<ResourceItem[]>([]);
   const [stateEvents, setStateEvents] = useState<StateEvent[]>([]);
-  
+
   const [loading, setLoading] = useState(true);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
@@ -182,7 +181,7 @@ export default function AdminDashboard() {
       const { count: volCount } = await supabase.from('volunteers').select('*', { count: 'exact', head: true });
       const { data: donData } = await supabase.from('donations').select('amount');
       const { count: msgCount } = await supabase.from('contacts').select('*', { count: 'exact', head: true });
-      
+
       const totalDonation = donData?.reduce((acc, curr) => acc + (curr.amount || 0), 0) || 0;
 
       setStats({
@@ -267,7 +266,7 @@ export default function AdminDashboard() {
     try {
       // Format the date to YYYY-MM-DD from the datetime-local value (YYYY-MM-DDTHH:MM)
       const formattedDate = newEvent.date.split('T')[0];
-      
+
       const { error } = await supabase.from('events').insert([{
         title: newEvent.title,
         event_date: formattedDate,
@@ -276,7 +275,7 @@ export default function AdminDashboard() {
         status: 'upcoming',
         gallery_urls: []
       }]);
-      
+
       if (error) throw error;
       setNewEvent({ title: "", date: "", location: "", desc: "" });
       fetchData();
@@ -302,7 +301,7 @@ export default function AdminDashboard() {
           gallery_urls: editingEvent.gallery_urls
         })
         .eq('id', editingEvent.id);
-      
+
       if (error) throw error;
       setEditingEvent(null);
       fetchData();
@@ -454,7 +453,7 @@ export default function AdminDashboard() {
 
   return (
     <div className="flex h-screen bg-slate-950 text-slate-100 font-sans">
-      
+
       {/* Sidebar */}
       <aside className={`bg-slate-900 border-r border-slate-800 transition-all duration-300 ${isSidebarOpen ? 'w-64' : 'w-20'}`}>
         <div className="p-6 border-b border-slate-800 flex items-center justify-between">
@@ -468,11 +467,10 @@ export default function AdminDashboard() {
             <button
               key={item.id}
               onClick={() => setActiveTab(item.id)}
-              className={`w-full flex items-center p-3 rounded-xl transition-all ${
-                activeTab === item.id 
-                ? 'bg-primary-600 text-white shadow-lg shadow-primary-900/40' 
+              className={`w-full flex items-center p-3 rounded-xl transition-all ${activeTab === item.id
+                ? 'bg-primary-600 text-white shadow-lg shadow-primary-900/40'
                 : 'text-slate-400 hover:bg-slate-800 hover:text-slate-100'
-              }`}
+                }`}
             >
               <span className="text-xl mr-3">{item.icon}</span>
               {isSidebarOpen && <span className="font-medium text-sm">{item.name}</span>}
@@ -483,7 +481,7 @@ export default function AdminDashboard() {
 
       {/* Main Content */}
       <main className="flex-1 flex flex-col overflow-hidden">
-        
+
         {/* Top Header */}
         <header className="h-16 bg-slate-900 border-b border-slate-800 flex items-center justify-between px-8">
           <h2 className="text-lg font-semibold">{menuItems.find(i => i.id === activeTab)?.name}</h2>
@@ -500,7 +498,7 @@ export default function AdminDashboard() {
 
         {/* Scrollable Area */}
         <div className="flex-1 overflow-y-auto p-8">
-          
+
           {activeTab === 'overview' && (
             <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
               {/* Stats Grid */}
@@ -570,13 +568,13 @@ export default function AdminDashboard() {
           {activeTab === 'volunteers' && (
             <div className="space-y-6">
               <div className="flex space-x-4 mb-6">
-                <button 
+                <button
                   onClick={() => setVolunteerSubTab('ngo')}
                   className={`px-6 py-2 rounded-full text-sm font-bold transition-all ${volunteerSubTab === 'ngo' ? 'bg-primary-600 text-white' : 'bg-slate-800 text-slate-400'}`}
                 >
                   NGO Pillar Applicants
                 </button>
-                <button 
+                <button
                   onClick={() => setVolunteerSubTab('event')}
                   className={`px-6 py-2 rounded-full text-sm font-bold transition-all ${volunteerSubTab === 'event' ? 'bg-primary-600 text-white' : 'bg-slate-800 text-slate-400'}`}
                 >
@@ -600,20 +598,20 @@ export default function AdminDashboard() {
                       volunteers.map(v => (
                         <tr key={v.id} className="hover:bg-slate-800/30 transition-colors">
                           <td className="px-6 py-4 font-bold">{v.full_name}</td>
-                          <td className="px-6 py-4 text-sm text-slate-400">{v.email}<br/>{v.phone}</td>
+                          <td className="px-6 py-4 text-sm text-slate-400">{v.email}<br />{v.phone}</td>
                           <td className="px-6 py-4 text-sm">
                             <span className="px-2 py-1 bg-blue-900/30 text-blue-400 rounded-md border border-blue-800/50">{v.program}</span>
                           </td>
                           <td className="px-6 py-4 capitalize">
-                             <select 
-                               value={v.status} 
-                               onChange={(e) => handleUpdateStatus('volunteers', v.id, e.target.value)}
-                               className="bg-slate-800 border border-slate-700 rounded px-2 py-1 text-xs outline-none"
-                             >
-                               <option value="pending">Pending</option>
-                               <option value="reviewed">Reviewed</option>
-                               <option value="active">Active</option>
-                             </select>
+                            <select
+                              value={v.status}
+                              onChange={(e) => handleUpdateStatus('volunteers', v.id, e.target.value)}
+                              className="bg-slate-800 border border-slate-700 rounded px-2 py-1 text-xs outline-none"
+                            >
+                              <option value="pending">Pending</option>
+                              <option value="reviewed">Reviewed</option>
+                              <option value="active">Active</option>
+                            </select>
                           </td>
                           <td className="px-6 py-4 text-right">
                             <button onClick={() => handleDelete('volunteers', v.id)} className="text-rose-500 hover:text-rose-400 ml-4 font-bold">🗑️</button>
@@ -624,19 +622,19 @@ export default function AdminDashboard() {
                       eventRegs.map(e => (
                         <tr key={e.id} className="hover:bg-slate-800/30 transition-colors">
                           <td className="px-6 py-4 font-bold">{e.full_name}</td>
-                          <td className="px-6 py-4 text-sm text-slate-400">{e.email}<br/>{e.phone}</td>
+                          <td className="px-6 py-4 text-sm text-slate-400">{e.email}<br />{e.phone}</td>
                           <td className="px-6 py-4 text-sm font-semibold text-primary-400">{e.event_title}</td>
                           <td className="px-6 py-4">
-                             <select 
-                               value={e.status} 
-                               onChange={(e_target) => handleUpdateStatus('event_registrations', e.id, e_target.target.value)}
-                               className="bg-slate-800 border border-slate-700 rounded px-2 py-1 text-xs outline-none"
-                             >
-                               <option value="pending">Pending</option>
-                               <option value="confirmed">Confirmed</option>
-                               <option value="attended">Attended</option>
-                               <option value="no-show">No Show</option>
-                             </select>
+                            <select
+                              value={e.status}
+                              onChange={(e_target) => handleUpdateStatus('event_registrations', e.id, e_target.target.value)}
+                              className="bg-slate-800 border border-slate-700 rounded px-2 py-1 text-xs outline-none"
+                            >
+                              <option value="pending">Pending</option>
+                              <option value="confirmed">Confirmed</option>
+                              <option value="attended">Attended</option>
+                              <option value="no-show">No Show</option>
+                            </select>
                           </td>
                           <td className="px-6 py-4 text-right">
                             <button onClick={() => handleDelete('event_registrations', e.id)} className="text-rose-500 hover:text-rose-400 font-bold">🗑️</button>
@@ -655,9 +653,9 @@ export default function AdminDashboard() {
               <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 mb-8">
                 <h3 className="text-xl font-bold mb-6">Manual Record Entry</h3>
                 <form onSubmit={handleAddDonation} className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                  <input type="text" placeholder="Donor Name" className="bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 outline-none" required value={newDonation.donor_name} onChange={e => setNewDonation({...newDonation, donor_name: e.target.value})} />
-                  <input type="email" placeholder="Email" className="bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 outline-none" required value={newDonation.donor_email} onChange={e => setNewDonation({...newDonation, donor_email: e.target.value})} />
-                  <input type="number" placeholder="Amount" className="bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 outline-none" required value={newDonation.amount} onChange={e => setNewDonation({...newDonation, amount: e.target.value})} />
+                  <input type="text" placeholder="Donor Name" className="bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 outline-none" required value={newDonation.donor_name} onChange={e => setNewDonation({ ...newDonation, donor_name: e.target.value })} />
+                  <input type="email" placeholder="Email" className="bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 outline-none" required value={newDonation.donor_email} onChange={e => setNewDonation({ ...newDonation, donor_email: e.target.value })} />
+                  <input type="number" placeholder="Amount" className="bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 outline-none" required value={newDonation.amount} onChange={e => setNewDonation({ ...newDonation, amount: e.target.value })} />
                   <button type="submit" className="bg-primary-600 hover:bg-primary-500 rounded-xl font-bold transition-all">Record Donation</button>
                 </form>
               </div>
@@ -676,7 +674,7 @@ export default function AdminDashboard() {
                   <tbody>
                     {donations.map(d => (
                       <tr key={d.id} className="border-t border-slate-800">
-                        <td className="px-6 py-4"><strong>{d.donor_name}</strong><br/><span className="text-xs text-slate-500">{d.donor_email}</span></td>
+                        <td className="px-6 py-4"><strong>{d.donor_name}</strong><br /><span className="text-xs text-slate-500">{d.donor_email}</span></td>
                         <td className="px-6 py-4 text-emerald-400 font-bold">₹{d.amount.toLocaleString()}</td>
                         <td className="px-6 py-4 uppercase text-xs font-bold">{d.frequency}</td>
                         <td className="px-6 py-4 text-xs text-slate-500">{new Date(d.created_at).toLocaleDateString()}</td>
@@ -695,27 +693,27 @@ export default function AdminDashboard() {
             <div className="space-y-4">
               {messages.map(m => (
                 <div key={m.id} className={`p-6 rounded-2xl border transition-all ${m.status === 'resolved' ? 'bg-slate-900 shadow-inner border-slate-800 opacity-60' : 'bg-slate-800/50 shadow-xl border-slate-700'}`}>
-                   <div className="flex justify-between items-start mb-4">
-                     <div>
-                       <span className={`px-2 py-1 rounded-md text-[10px] font-bold uppercase mr-2 ${m.subject?.toLowerCase().includes('suggest') ? 'bg-purple-900 text-purple-400' : 'bg-primary-900 text-primary-400'}`}>
-                         {m.subject || 'GENERAL'}
-                       </span>
-                       <h4 className="font-bold text-lg inline-block">{m.name}</h4>
-                       <p className="text-xs text-slate-400">{m.email} • {new Date(m.created_at).toLocaleString()}</p>
-                     </div>
-                     <div className="flex space-x-2">
-                       {m.status !== 'resolved' && (
-                         <button 
-                           onClick={() => handleUpdateStatus('contacts', m.id, 'resolved')}
-                           className="px-3 py-1 bg-green-900 border border-green-800 text-green-400 text-xs font-bold rounded-lg hover:bg-green-800"
-                         >
-                           Mark Resolved
-                         </button>
-                       )}
-                       <button onClick={() => handleDelete('contacts', m.id)} className="bg-rose-900/30 text-rose-500 p-2 rounded-lg">🗑️</button>
-                     </div>
-                   </div>
-                   <p className="text-slate-300 leading-relaxed italic">"{m.message}"</p>
+                  <div className="flex justify-between items-start mb-4">
+                    <div>
+                      <span className={`px-2 py-1 rounded-md text-[10px] font-bold uppercase mr-2 ${m.subject?.toLowerCase().includes('suggest') ? 'bg-purple-900 text-purple-400' : 'bg-primary-900 text-primary-400'}`}>
+                        {m.subject || 'GENERAL'}
+                      </span>
+                      <h4 className="font-bold text-lg inline-block">{m.name}</h4>
+                      <p className="text-xs text-slate-400">{m.email} • {new Date(m.created_at).toLocaleString()}</p>
+                    </div>
+                    <div className="flex space-x-2">
+                      {m.status !== 'resolved' && (
+                        <button
+                          onClick={() => handleUpdateStatus('contacts', m.id, 'resolved')}
+                          className="px-3 py-1 bg-green-900 border border-green-800 text-green-400 text-xs font-bold rounded-lg hover:bg-green-800"
+                        >
+                          Mark Resolved
+                        </button>
+                      )}
+                      <button onClick={() => handleDelete('contacts', m.id)} className="bg-rose-900/30 text-rose-500 p-2 rounded-lg">🗑️</button>
+                    </div>
+                  </div>
+                  <p className="text-slate-300 leading-relaxed italic">"{m.message}"</p>
                 </div>
               ))}
               {messages.length === 0 && <div className="text-center py-20 text-slate-600">No messages yet.</div>}
@@ -727,10 +725,10 @@ export default function AdminDashboard() {
               <div className="bg-slate-900 border border-slate-800 rounded-2xl p-8 sticky top-0">
                 <h3 className="text-2xl font-bold mb-6">Schedule New Event</h3>
                 <form onSubmit={handleAddEvent} className="space-y-4">
-                  <input type="text" placeholder="Event Title" className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 outline-none focus:border-primary-500" required value={newEvent.title} onChange={e => setNewEvent({...newEvent, title: e.target.value})} />
-                  <input type="datetime-local" className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 outline-none focus:border-primary-500" required value={newEvent.date} onChange={e => setNewEvent({...newEvent, date: e.target.value})} />
-                  <input type="text" placeholder="Location" className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 outline-none focus:border-primary-500" required value={newEvent.location} onChange={e => setNewEvent({...newEvent, location: e.target.value})} />
-                  <textarea placeholder="Description..." className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 outline-none focus:border-primary-500 h-32" required value={newEvent.desc} onChange={e => setNewEvent({...newEvent, desc: e.target.value})} />
+                  <input type="text" placeholder="Event Title" className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 outline-none focus:border-primary-500" required value={newEvent.title} onChange={e => setNewEvent({ ...newEvent, title: e.target.value })} />
+                  <input type="datetime-local" className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 outline-none focus:border-primary-500" required value={newEvent.date} onChange={e => setNewEvent({ ...newEvent, date: e.target.value })} />
+                  <input type="text" placeholder="Location" className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 outline-none focus:border-primary-500" required value={newEvent.location} onChange={e => setNewEvent({ ...newEvent, location: e.target.value })} />
+                  <textarea placeholder="Description..." className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 outline-none focus:border-primary-500 h-32" required value={newEvent.desc} onChange={e => setNewEvent({ ...newEvent, desc: e.target.value })} />
                   <button type="submit" className="w-full py-4 bg-primary-600 hover:bg-primary-500 rounded-xl font-bold transition-all shadow-lg">Launch Event</button>
                 </form>
               </div>
@@ -741,8 +739,8 @@ export default function AdminDashboard() {
                     <div className="flex justify-between items-start mb-2">
                       <h4 className="font-bold text-lg">{e.title}</h4>
                       <div className="flex space-x-3 items-center">
-                        <button 
-                          className="text-xs font-bold text-primary-400 hover:text-primary-300 transition-colors bg-primary-400/10 px-3 py-1.5 rounded-lg border border-primary-400/20" 
+                        <button
+                          className="text-xs font-bold text-primary-400 hover:text-primary-300 transition-colors bg-primary-400/10 px-3 py-1.5 rounded-lg border border-primary-400/20"
                           onClick={() => setEditingEvent(e)}
                         >
                           Manage Gallery & Report
@@ -779,17 +777,17 @@ export default function AdminDashboard() {
                   </div>
                   <button onClick={() => setEditingEvent(null)} className="p-2 hover:bg-slate-800 rounded-full transition-colors text-slate-400 hover:text-white">✕</button>
                 </div>
-                
+
                 <div className="flex-1 overflow-y-auto p-8 custom-scrollbar">
                   <form id="edit-event-form" onSubmit={handleUpdateEvent} className="space-y-8">
                     <div className="grid md:grid-cols-2 gap-6">
                       <div className="space-y-2">
                         <label className="text-xs font-bold text-slate-500 uppercase tracking-widest ml-1">Event Title</label>
-                        <input type="text" className="w-full bg-slate-800 border border-slate-700 rounded-2xl px-5 py-3.5 outline-none focus:border-primary-500 transition-all font-medium" value={editingEvent.title} onChange={e => setEditingEvent({...editingEvent, title: e.target.value})} />
+                        <input type="text" className="w-full bg-slate-800 border border-slate-700 rounded-2xl px-5 py-3.5 outline-none focus:border-primary-500 transition-all font-medium" value={editingEvent.title} onChange={e => setEditingEvent({ ...editingEvent, title: e.target.value })} />
                       </div>
                       <div className="space-y-2">
                         <label className="text-xs font-bold text-slate-500 uppercase tracking-widest ml-1">Location</label>
-                        <input type="text" className="w-full bg-slate-800 border border-slate-700 rounded-2xl px-5 py-3.5 outline-none focus:border-primary-500 transition-all font-medium" value={editingEvent.location} onChange={e => setEditingEvent({...editingEvent, location: e.target.value})} />
+                        <input type="text" className="w-full bg-slate-800 border border-slate-700 rounded-2xl px-5 py-3.5 outline-none focus:border-primary-500 transition-all font-medium" value={editingEvent.location} onChange={e => setEditingEvent({ ...editingEvent, location: e.target.value })} />
                       </div>
                     </div>
 
@@ -797,10 +795,10 @@ export default function AdminDashboard() {
                       <label className="text-xs font-bold text-slate-500 uppercase tracking-widest ml-1">Event Status</label>
                       <div className="flex gap-3">
                         {['upcoming', 'completed', 'cancelled'].map(status => (
-                          <button 
+                          <button
                             key={status}
                             type="button"
-                            onClick={() => setEditingEvent({...editingEvent, status})}
+                            onClick={() => setEditingEvent({ ...editingEvent, status })}
                             className={`flex-1 py-3 px-4 rounded-xl text-xs font-black uppercase tracking-widest border transition-all ${editingEvent.status === status ? 'bg-primary-600 border-primary-500 text-white shadow-lg' : 'bg-slate-800 border-slate-700 text-slate-500 hover:bg-slate-700'}`}
                           >
                             {status}
@@ -815,7 +813,7 @@ export default function AdminDashboard() {
                         {editingEvent.gallery_urls?.map((url, i) => (
                           <div key={i} className="relative aspect-square rounded-2xl overflow-hidden group">
                             <img src={url} alt="" className="w-full h-full object-cover" />
-                            <button 
+                            <button
                               type="button"
                               onClick={() => removeGalleryImage(url)}
                               className="absolute top-2 right-2 p-1.5 bg-rose-600 text-white rounded-lg opacity-0 group-hover:opacity-100 transition-opacity shadow-lg"
@@ -837,14 +835,14 @@ export default function AdminDashboard() {
                         </label>
                       </div>
                     </div>
-                    
+
                     <div className="space-y-2">
                       <label className="text-xs font-bold text-slate-500 uppercase tracking-widest ml-1">Post-Event Report / Summary</label>
                       <div className="bg-slate-800 border border-slate-700 rounded-[2rem] overflow-hidden min-h-[250px]">
-                        <ReactQuill 
-                          theme="snow" 
-                          value={editingEvent.report_html || ""} 
-                          onChange={(val) => setEditingEvent({...editingEvent, report_html: val})}
+                        <ReactQuill
+                          theme="snow"
+                          value={editingEvent.report_html || ""}
+                          onChange={(val) => setEditingEvent({ ...editingEvent, report_html: val })}
                           modules={quillModules}
                           className="h-full border-none text-white"
                         />
@@ -867,14 +865,14 @@ export default function AdminDashboard() {
                 <h3 className="text-2xl font-bold mb-6">Manage Services / Courses</h3>
                 <form onSubmit={handleAddService} className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-4">
-                    <input type="text" placeholder="Title (e.g. Digital Literacy)" className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 outline-none" required value={newService.title} onChange={e => setNewService({...newService, title: e.target.value})} />
-                    <input type="text" placeholder="Icon Emoji (e.g. 💻)" className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 outline-none" required value={newService.icon} onChange={e => setNewService({...newService, icon: e.target.value})} />
-                    <input type="text" placeholder="Schedule" className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 outline-none" required value={newService.schedule} onChange={e => setNewService({...newService, schedule: e.target.value})} />
-                    <input type="text" placeholder="Image URL" className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 outline-none" value={newService.image_url} onChange={e => setNewService({...newService, image_url: e.target.value})} />
+                    <input type="text" placeholder="Title (e.g. Digital Literacy)" className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 outline-none" required value={newService.title} onChange={e => setNewService({ ...newService, title: e.target.value })} />
+                    <input type="text" placeholder="Icon Emoji (e.g. 💻)" className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 outline-none" required value={newService.icon} onChange={e => setNewService({ ...newService, icon: e.target.value })} />
+                    <input type="text" placeholder="Schedule" className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 outline-none" required value={newService.schedule} onChange={e => setNewService({ ...newService, schedule: e.target.value })} />
+                    <input type="text" placeholder="Image URL" className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 outline-none" value={newService.image_url} onChange={e => setNewService({ ...newService, image_url: e.target.value })} />
                   </div>
                   <div className="space-y-4">
-                    <textarea placeholder="Description..." className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 outline-none h-24" required value={newService.description} onChange={e => setNewService({...newService, description: e.target.value})} />
-                    <textarea placeholder="Highlights (Comma separated)..." className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 outline-none h-24" required value={newService.highlights} onChange={e => setNewService({...newService, highlights: e.target.value})} />
+                    <textarea placeholder="Description..." className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 outline-none h-24" required value={newService.description} onChange={e => setNewService({ ...newService, description: e.target.value })} />
+                    <textarea placeholder="Highlights (Comma separated)..." className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 outline-none h-24" required value={newService.highlights} onChange={e => setNewService({ ...newService, highlights: e.target.value })} />
                     <button type="submit" className="w-full py-4 bg-primary-600 hover:bg-primary-500 rounded-xl font-bold transition-all">Publish Service</button>
                   </div>
                 </form>
@@ -898,22 +896,22 @@ export default function AdminDashboard() {
 
           {activeTab === 'resources' && (
             <div className="space-y-8">
-               <div className="bg-slate-900 border border-slate-800 rounded-2xl p-8">
-                  <h3 className="text-2xl font-bold mb-6">Add Digital Resource</h3>
-                  <form onSubmit={handleAddResource} className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                    <input type="text" placeholder="Title (e.g. Maths PDF)" className="bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 outline-none md:col-span-2" required value={newResource.title} onChange={e => setNewResource({...newResource, title: e.target.value})} />
-                    <select className="bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 outline-none" value={newResource.type} onChange={e => setNewResource({...newResource, type: e.target.value})}>
-                      <option>PDF</option>
-                      <option>ZIP</option>
-                      <option>PNG</option>
-                      <option>JPG</option>
-                    </select>
-                    <input type="text" placeholder="Size (e.g. 2.5 MB)" className="bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 outline-none" required value={newResource.size} onChange={e => setNewResource({...newResource, size: e.target.value})} />
-                    <input type="text" placeholder="Source URL / Link" className="bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 outline-none md:col-span-3" required value={newResource.file_url} onChange={e => setNewResource({...newResource, file_url: e.target.value})} />
-                    <button type="submit" className="bg-primary-600 hover:bg-primary-500 rounded-xl font-bold transition-all">Add To Library</button>
-                  </form>
-               </div>
-               <div className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden ring-1 ring-slate-800">
+              <div className="bg-slate-900 border border-slate-800 rounded-2xl p-8">
+                <h3 className="text-2xl font-bold mb-6">Add Digital Resource</h3>
+                <form onSubmit={handleAddResource} className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                  <input type="text" placeholder="Title (e.g. Maths PDF)" className="bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 outline-none md:col-span-2" required value={newResource.title} onChange={e => setNewResource({ ...newResource, title: e.target.value })} />
+                  <select className="bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 outline-none" value={newResource.type} onChange={e => setNewResource({ ...newResource, type: e.target.value })}>
+                    <option>PDF</option>
+                    <option>ZIP</option>
+                    <option>PNG</option>
+                    <option>JPG</option>
+                  </select>
+                  <input type="text" placeholder="Size (e.g. 2.5 MB)" className="bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 outline-none" required value={newResource.size} onChange={e => setNewResource({ ...newResource, size: e.target.value })} />
+                  <input type="text" placeholder="Source URL / Link" className="bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 outline-none md:col-span-3" required value={newResource.file_url} onChange={e => setNewResource({ ...newResource, file_url: e.target.value })} />
+                  <button type="submit" className="bg-primary-600 hover:bg-primary-500 rounded-xl font-bold transition-all">Add To Library</button>
+                </form>
+              </div>
+              <div className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden ring-1 ring-slate-800">
                 <table className="w-full text-left">
                   <thead className="bg-slate-800/80 text-slate-400 text-xs uppercase">
                     <tr>
@@ -942,164 +940,164 @@ export default function AdminDashboard() {
 
           {activeTab === 'blog' && (
             <div className="grid lg:grid-cols-2 gap-8">
-               <div className="bg-slate-900 border border-slate-800 rounded-2xl p-8">
-                  <h3 className="text-2xl font-bold mb-6">Write New Article</h3>
-                  <form onSubmit={handleAddBlog} className="space-y-4">
-                    <input type="text" placeholder="Article Title" className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 outline-none" required value={newBlog.title} onChange={e => setNewBlog({...newBlog, title: e.target.value})} />
-                    <div className="grid grid-cols-2 gap-4">
-                      <select className="bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 outline-none" value={newBlog.category} onChange={e => setNewBlog({...newBlog, category: e.target.value})}>
-                        <option>Education</option>
-                        <option>Environment</option>
-                        <option>Health</option>
-                        <option>Rights</option>
-                      </select>
-                      <input type="text" placeholder="Author" className="bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 outline-none" value={newBlog.author} onChange={e => setNewBlog({...newBlog, author: e.target.value})} />
-                    </div>
-                    <input type="text" placeholder="Image URL" className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 outline-none" value={newBlog.image_url} onChange={e => setNewBlog({...newBlog, image_url: e.target.value})} />
-                    
-                    <div className="bg-slate-800 border border-slate-700 rounded-xl overflow-hidden min-h-[300px]">
-                      <ReactQuill
-                        theme="snow"
-                        value={newBlog.content}
-                        onChange={(content) => setNewBlog({ ...newBlog, content })}
-                        modules={quillModules}
-                        placeholder="Write your article content here..."
-                        className="text-slate-100"
-                      />
-                    </div>
+              <div className="bg-slate-900 border border-slate-800 rounded-2xl p-8">
+                <h3 className="text-2xl font-bold mb-6">Write New Article</h3>
+                <form onSubmit={handleAddBlog} className="space-y-4">
+                  <input type="text" placeholder="Article Title" className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 outline-none" required value={newBlog.title} onChange={e => setNewBlog({ ...newBlog, title: e.target.value })} />
+                  <div className="grid grid-cols-2 gap-4">
+                    <select className="bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 outline-none" value={newBlog.category} onChange={e => setNewBlog({ ...newBlog, category: e.target.value })}>
+                      <option>Education</option>
+                      <option>Environment</option>
+                      <option>Health</option>
+                      <option>Rights</option>
+                    </select>
+                    <input type="text" placeholder="Author" className="bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 outline-none" value={newBlog.author} onChange={e => setNewBlog({ ...newBlog, author: e.target.value })} />
+                  </div>
+                  <input type="text" placeholder="Image URL" className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 outline-none" value={newBlog.image_url} onChange={e => setNewBlog({ ...newBlog, image_url: e.target.value })} />
 
-                    <button type="submit" className="w-full py-4 bg-indigo-600 hover:bg-indigo-500 rounded-xl font-bold transition-all">Publish</button>
-                  </form>
-               </div>
-               <div className="space-y-4">
-                  <h3 className="text-xl font-bold">Manage Articles</h3>
-                  {blogPosts.map(bp => (
-                    <div key={bp.id} className="p-4 bg-slate-900 border border-slate-800 rounded-xl flex justify-between items-center group">
-                      <div>
-                        <h4 className="font-bold line-clamp-1 text-sm">{bp.title}</h4>
-                      </div>
-                      <button onClick={() => handleDelete('blog_posts', bp.id)} className="text-rose-500">🗑️</button>
+                  <div className="bg-slate-800 border border-slate-700 rounded-xl overflow-hidden min-h-[300px]">
+                    <ReactQuill
+                      theme="snow"
+                      value={newBlog.content}
+                      onChange={(content) => setNewBlog({ ...newBlog, content })}
+                      modules={quillModules}
+                      placeholder="Write your article content here..."
+                      className="text-slate-100"
+                    />
+                  </div>
+
+                  <button type="submit" className="w-full py-4 bg-indigo-600 hover:bg-indigo-500 rounded-xl font-bold transition-all">Publish</button>
+                </form>
+              </div>
+              <div className="space-y-4">
+                <h3 className="text-xl font-bold">Manage Articles</h3>
+                {blogPosts.map(bp => (
+                  <div key={bp.id} className="p-4 bg-slate-900 border border-slate-800 rounded-xl flex justify-between items-center group">
+                    <div>
+                      <h4 className="font-bold line-clamp-1 text-sm">{bp.title}</h4>
                     </div>
-                  ))}
-               </div>
+                    <button onClick={() => handleDelete('blog_posts', bp.id)} className="text-rose-500">🗑️</button>
+                  </div>
+                ))}
+              </div>
             </div>
           )}
 
           {activeTab === 'testimonials' && (
-             <div className="max-w-4xl">
-               <div className="bg-slate-900 border border-slate-800 rounded-2xl p-8 mb-8">
-                  <h3 className="text-2xl font-bold mb-6">New Success Story</h3>
-                  <form onSubmit={handleAddTestimonial} className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <input type="text" placeholder="Person's Name" className="bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 outline-none" required value={newTestimonial.name} onChange={e => setNewTestimonial({...newTestimonial, name: e.target.value})} />
-                    <input type="text" placeholder="Role/Class" className="bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 outline-none" required value={newTestimonial.role} onChange={e => setNewTestimonial({...newTestimonial, role: e.target.value})} />
-                    <textarea placeholder="Testimonial..." className="md:col-span-2 bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 outline-none h-32" required value={newTestimonial.content} onChange={e => setNewTestimonial({...newTestimonial, content: e.target.value})} />
-                    <button type="submit" className="md:col-span-2 py-4 bg-primary-600 hover:bg-primary-500 rounded-xl font-bold transition-all">Publish</button>
-                  </form>
-               </div>
-               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                 {testimonials.map(t => (
-                   <div key={t.id} className="p-6 bg-slate-900 border border-slate-800 rounded-2xl relative group">
-                     <button onClick={() => handleDelete('testimonials', t.id)} className="absolute top-4 right-4 text-rose-500">🗑️</button>
-                     <p className="text-slate-300 text-sm italic mb-4">"{t.content}"</p>
-                     <p className="font-bold">{t.name}</p>
-                   </div>
-                 ))}
-               </div>
-             </div>
+            <div className="max-w-4xl">
+              <div className="bg-slate-900 border border-slate-800 rounded-2xl p-8 mb-8">
+                <h3 className="text-2xl font-bold mb-6">New Success Story</h3>
+                <form onSubmit={handleAddTestimonial} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <input type="text" placeholder="Person's Name" className="bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 outline-none" required value={newTestimonial.name} onChange={e => setNewTestimonial({ ...newTestimonial, name: e.target.value })} />
+                  <input type="text" placeholder="Role/Class" className="bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 outline-none" required value={newTestimonial.role} onChange={e => setNewTestimonial({ ...newTestimonial, role: e.target.value })} />
+                  <textarea placeholder="Testimonial..." className="md:col-span-2 bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 outline-none h-32" required value={newTestimonial.content} onChange={e => setNewTestimonial({ ...newTestimonial, content: e.target.value })} />
+                  <button type="submit" className="md:col-span-2 py-4 bg-primary-600 hover:bg-primary-500 rounded-xl font-bold transition-all">Publish</button>
+                </form>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {testimonials.map(t => (
+                  <div key={t.id} className="p-6 bg-slate-900 border border-slate-800 rounded-2xl relative group">
+                    <button onClick={() => handleDelete('testimonials', t.id)} className="absolute top-4 right-4 text-rose-500">🗑️</button>
+                    <p className="text-slate-300 text-sm italic mb-4">"{t.content}"</p>
+                    <p className="font-bold">{t.name}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
           )}
 
 
           {activeTab === 'state_events' && (
-             <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-                <div className="bg-slate-900 border border-slate-800 rounded-[2rem] p-8 shadow-2xl">
-                   <h3 className="text-xl font-bold mb-6 flex items-center">
-                     <span className="w-8 h-8 bg-primary-600/20 text-primary-400 rounded-lg flex items-center justify-center mr-3 text-lg">📍</span>
-                     Add State Initiative / Event
-                   </h3>
-                   <form onSubmit={handleAddStateEvent} className="grid md:grid-cols-2 gap-6">
-                      <div className="space-y-2">
-                         <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Select State</label>
-                         <select
-                            required
-                            value={newStateEvent.state}
-                            onChange={(e) => setNewStateEvent({...newStateEvent, state: e.target.value})}
-                            className="w-full h-14 bg-slate-800 border-2 border-slate-700 rounded-2xl px-5 focus:outline-none focus:border-primary-500 transition-all font-medium"
-                         >
-                            {INDIA_STATES.map(s => <option key={s} value={s}>{s}</option>)}
-                         </select>
-                      </div>
-                      <div className="space-y-2">
-                         <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Activity Title</label>
-                         <input
-                            required
-                            type="text"
-                            placeholder="e.g. Legal Awareness Drive"
-                            value={newStateEvent.title}
-                            onChange={(e) => setNewStateEvent({...newStateEvent, title: e.target.value})}
-                            className="w-full h-14 bg-slate-800 border-2 border-slate-700 rounded-2xl px-5 focus:outline-none focus:border-primary-500 transition-all font-medium"
-                         />
-                      </div>
-                      <div className="space-y-2">
-                         <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Date</label>
-                         <input
-                            required
-                            type="date"
-                            value={newStateEvent.date}
-                            onChange={(e) => setNewStateEvent({...newStateEvent, date: e.target.value})}
-                            className="w-full h-14 bg-slate-800 border-2 border-slate-700 rounded-2xl px-5 focus:outline-none focus:border-primary-500 transition-all font-medium color-scheme-dark"
-                         />
-                      </div>
-                      <div className="space-y-2">
-                         <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Location (City/District)</label>
-                         <input
-                            type="text"
-                            placeholder="e.g. Lucknow"
-                            value={newStateEvent.location}
-                            onChange={(e) => setNewStateEvent({...newStateEvent, location: e.target.value})}
-                            className="w-full h-14 bg-slate-800 border-2 border-slate-700 rounded-2xl px-5 focus:outline-none focus:border-primary-500 transition-all font-medium"
-                         />
-                      </div>
-                      <div className="md:col-span-2 space-y-2">
-                         <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Details</label>
-                         <textarea
-                            rows={3}
-                            placeholder="Briefly describe the impact or what happened..."
-                            value={newStateEvent.desc}
-                            onChange={(e) => setNewStateEvent({...newStateEvent, desc: e.target.value})}
-                            className="w-full bg-slate-800 border-2 border-slate-700 rounded-2xl p-5 focus:outline-none focus:border-primary-500 transition-all font-medium"
-                         />
-                      </div>
-                      <div className="md:col-span-2">
-                         <button type="submit" className="w-full h-14 bg-primary-600 hover:bg-primary-500 text-white font-black rounded-2xl shadow-xl shadow-primary-900/20 transition-all active:scale-[0.98]">
-                            Add Initiative
-                         </button>
-                      </div>
-                   </form>
-                </div>
+            <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+              <div className="bg-slate-900 border border-slate-800 rounded-[2rem] p-8 shadow-2xl">
+                <h3 className="text-xl font-bold mb-6 flex items-center">
+                  <span className="w-8 h-8 bg-primary-600/20 text-primary-400 rounded-lg flex items-center justify-center mr-3 text-lg">📍</span>
+                  Add State Initiative / Event
+                </h3>
+                <form onSubmit={handleAddStateEvent} className="grid md:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Select State</label>
+                    <select
+                      required
+                      value={newStateEvent.state}
+                      onChange={(e) => setNewStateEvent({ ...newStateEvent, state: e.target.value })}
+                      className="w-full h-14 bg-slate-800 border-2 border-slate-700 rounded-2xl px-5 focus:outline-none focus:border-primary-500 transition-all font-medium"
+                    >
+                      {INDIA_STATES.map(s => <option key={s} value={s}>{s}</option>)}
+                    </select>
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Activity Title</label>
+                    <input
+                      required
+                      type="text"
+                      placeholder="e.g. Legal Awareness Drive"
+                      value={newStateEvent.title}
+                      onChange={(e) => setNewStateEvent({ ...newStateEvent, title: e.target.value })}
+                      className="w-full h-14 bg-slate-800 border-2 border-slate-700 rounded-2xl px-5 focus:outline-none focus:border-primary-500 transition-all font-medium"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Date</label>
+                    <input
+                      required
+                      type="date"
+                      value={newStateEvent.date}
+                      onChange={(e) => setNewStateEvent({ ...newStateEvent, date: e.target.value })}
+                      className="w-full h-14 bg-slate-800 border-2 border-slate-700 rounded-2xl px-5 focus:outline-none focus:border-primary-500 transition-all font-medium color-scheme-dark"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Location (City/District)</label>
+                    <input
+                      type="text"
+                      placeholder="e.g. Lucknow"
+                      value={newStateEvent.location}
+                      onChange={(e) => setNewStateEvent({ ...newStateEvent, location: e.target.value })}
+                      className="w-full h-14 bg-slate-800 border-2 border-slate-700 rounded-2xl px-5 focus:outline-none focus:border-primary-500 transition-all font-medium"
+                    />
+                  </div>
+                  <div className="md:col-span-2 space-y-2">
+                    <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Details</label>
+                    <textarea
+                      rows={3}
+                      placeholder="Briefly describe the impact or what happened..."
+                      value={newStateEvent.desc}
+                      onChange={(e) => setNewStateEvent({ ...newStateEvent, desc: e.target.value })}
+                      className="w-full bg-slate-800 border-2 border-slate-700 rounded-2xl p-5 focus:outline-none focus:border-primary-500 transition-all font-medium"
+                    />
+                  </div>
+                  <div className="md:col-span-2">
+                    <button type="submit" className="w-full h-14 bg-primary-600 hover:bg-primary-500 text-white font-black rounded-2xl shadow-xl shadow-primary-900/20 transition-all active:scale-[0.98]">
+                      Add Initiative
+                    </button>
+                  </div>
+                </form>
+              </div>
 
-                <div className="grid lg:grid-cols-2 gap-6">
-                   {stateEvents.map(se => (
-                      <div key={se.id} className="bg-slate-900 border border-slate-800 rounded-2xl p-6 relative group">
-                         <button onClick={() => handleDelete('state_events', se.id)} className="absolute top-4 right-4 text-rose-500 opacity-0 group-hover:opacity-100 transition-opacity">🗑️</button>
-                         <div className="flex items-center gap-2 mb-3">
-                            <span className="px-2 py-0.5 bg-primary-600/10 text-primary-400 text-[10px] font-black uppercase rounded-lg border border-primary-600/20">
-                               {se.state}
-                            </span>
-                            <span className="text-slate-500 text-[10px] font-bold">{se.event_date}</span>
-                         </div>
-                         <h4 className="font-bold text-slate-100 mb-2">{se.title}</h4>
-                         {se.location && <p className="text-xs text-primary-400 mb-2">📍 {se.location}</p>}
-                         <p className="text-xs text-slate-400 leading-relaxed">{se.description}</p>
-                      </div>
-                   ))}
-                </div>
-             </div>
+              <div className="grid lg:grid-cols-2 gap-6">
+                {stateEvents.map(se => (
+                  <div key={se.id} className="bg-slate-900 border border-slate-800 rounded-2xl p-6 relative group">
+                    <button onClick={() => handleDelete('state_events', se.id)} className="absolute top-4 right-4 text-rose-500 opacity-0 group-hover:opacity-100 transition-opacity">🗑️</button>
+                    <div className="flex items-center gap-2 mb-3">
+                      <span className="px-2 py-0.5 bg-primary-600/10 text-primary-400 text-[10px] font-black uppercase rounded-lg border border-primary-600/20">
+                        {se.state}
+                      </span>
+                      <span className="text-slate-500 text-[10px] font-bold">{se.event_date}</span>
+                    </div>
+                    <h4 className="font-bold text-slate-100 mb-2">{se.title}</h4>
+                    {se.location && <p className="text-xs text-primary-400 mb-2">📍 {se.location}</p>}
+                    <p className="text-xs text-slate-400 leading-relaxed">{se.description}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
           )}
 
           {loading && (
-             <div className="fixed inset-0 bg-slate-950/50 backdrop-blur-sm flex items-center justify-center z-50">
-                <div className="animate-spin h-12 w-12 border-4 border-primary-500 border-t-transparent rounded-full"></div>
-             </div>
+            <div className="fixed inset-0 bg-slate-950/50 backdrop-blur-sm flex items-center justify-center z-50">
+              <div className="animate-spin h-12 w-12 border-4 border-primary-500 border-t-transparent rounded-full"></div>
+            </div>
           )}
 
         </div>
