@@ -76,9 +76,15 @@ export default function VolunteerClient() {
           <h1 className="text-4xl md:text-5xl font-bold mb-6 tracking-tight">
             {t("volunteer_title")}
           </h1>
-          <p className="max-w-2xl mx-auto text-xl text-primary-100">
+          <p className="max-w-2xl mx-auto text-xl text-primary-100 mb-6">
             {t("volunteer_subtitle")}
           </p>
+          <div className="inline-flex items-center space-x-2 bg-white/10 px-4 py-2 rounded-xl backdrop-blur-sm border border-white/20">
+             <span className="text-primary-200 text-sm">{t("volunteer_direct_text")}</span>
+             <a href={`mailto:${t("volunteer_direct_email")}`} className="text-white font-bold text-sm tracking-wide hover:underline">
+               {t("volunteer_direct_email")}
+             </a>
+          </div>
         </div>
       </div>
 

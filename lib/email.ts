@@ -5,7 +5,7 @@ const SMTP_HOST = process.env.SMTP_HOST || 'smtp.gmail.com';
 const SMTP_PORT = parseInt(process.env.SMTP_PORT || '587');
 const SMTP_USER = process.env.SMTP_USER || ''; // Your email
 const SMTP_PASS = process.env.SMTP_PASS || ''; // Your app password
-const FROM_EMAIL = process.env.FROM_EMAIL || '"PCHR&R Team" <support@possiblecentre.com>';
+const FROM_EMAIL = process.env.FROM_EMAIL || '"PCHR&R Team" <info@possiblecentre.com>';
 
 // WhatsApp Links
 const WHATSAPP_CHANNEL = process.env.WHATSAPP_CHANNEL || 'https://whatsapp.com/channel/example';
