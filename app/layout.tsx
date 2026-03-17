@@ -21,7 +21,16 @@ export const metadata: Metadata = {
     template: "%s | PCHR&R"
   },
   description: "PCHR&R is a premier NGO in India dedicated to promoting human rights, responsibilities, and social awareness through education, legal aid, and community services.",
-  keywords: ["NGO", "Human Rights", "Education India", "Civil Rights", "PCHR&R", "Social Awareness", "Legal Aid India", "मानवाधिकार", "समाज सेवा", "NGO दिल्ली"],
+  keywords: [
+    "PCHR&R", "Possible Centre", "Possible Centre for Human Rights and Responsibilities", 
+    "Top NGO in India", "Best NGO in Delhi", "NGO Delhi", "Human Rights NGO",
+    "Free Education NGO", "Child Education Charity", "Donate for child education",
+    "Environmental NGO India", "Health Camp NGO", "Legal Awareness NGO", "Civil Rights",
+    "CSR NGO partner", "Volunteer for NGO in India", "Donate to charity", 
+    "Social Awareness", "Community Services", "Women Empowerment NGO",
+    "मानवाधिकार संगठन", "शिक्षा एनजीओ", "भारत का सर्वश्रेष्ठ एनजीओ", "समाज सेवा",
+    "PCHRR NGO", "Non-Governmental Organization India"
+  ],
   authors: [{ name: "PCHR&R Team" }],
   creator: "PCHR&R",
   publisher: "PCHR&R",
