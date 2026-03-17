@@ -85,14 +85,8 @@ export const translations = {
     about_value6_text: "We strive for the highest quality in the educational services we provide.",
     about_team_title: "Our Leadership Team",
     about_team_subtitle: "Meet the dedicated individuals driving PCHR&R's mission forward.",
-    about_team_member1_name: "Ayush Maurya",
-    about_team_member1_role: "Founder & President",
-    about_team_member2_name: "Sandeep Kumar",
-    about_team_member2_role: "Director of Operations",
-    about_team_member3_name: "Adv. Meena Rani",
-    about_team_member3_role: "Head of Legal Aid",
-    about_team_member4_name: "Dr. Vikas Singh",
-    about_team_member4_role: "Community Outreach",
+    about_team_name: "Founder / Leader Name",
+    about_team_role: "Position / Role",
 
     // Services Page
     services_title: "Our Empowering Services",
@@ -395,14 +389,8 @@ export const translations = {
     about_value6_text: "हम अपनी शैक्षिक सेवाओं में सर्वोच्च गुणवत्ता के लिए प्रयासरत हैं।",
     about_team_title: "हमारी नेतृत्व टीम",
     about_team_subtitle: "उन समर्पित लोगों से मिलें जो PCHR&R के मिशन को आगे बढ़ा रहे हैं।",
-    about_team_member1_name: "आयुष मौर्य",
-    about_team_member1_role: "संस्थापक और अध्यक्ष",
-    about_team_member2_name: "संदीप कुमार",
-    about_team_member2_role: "संचालन निदेशक",
-    about_team_member3_name: "एडवोकेट मीना रानी",
-    about_team_member3_role: "कानूनी सहायता प्रमुख",
-    about_team_member4_name: "डॉ. विकास सिंह",
-    about_team_member4_role: "सामुदायिक आउटरीच",
+    about_team_name: "संस्थापक / नेता का नाम",
+    about_team_role: "पद / भूमिका",
 
     // Services Page
     services_title: "हमारी सशक्त सेवाएं",
