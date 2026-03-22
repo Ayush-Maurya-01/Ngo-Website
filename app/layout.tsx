@@ -103,6 +103,15 @@ export default function RootLayout({
             });
           `}
         </Script>
+
+        {/* Primary Domain Redirect */}
+        <Script id="primary-domain-redirect" strategy="afterInteractive">
+          {`
+            if (window.location.hostname === 'possible-center-ngo.web.app' || window.location.hostname === 'possible-center-ngo.firebaseapp.com') {
+              window.location.replace('https://possiblecentre.com' + window.location.pathname + window.location.search);
+            }
+          `}
+        </Script>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
