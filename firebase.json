@@ -7,13 +7,6 @@
       "**/node_modules/**"
     ],
     "cleanUrls": true,
-    "redirects": [
-      {
-        "source": "**",
-        "destination": "https://possiblecentre.com",
-        "type": 301
-      }
-    ],
     "rewrites": [
       {
         "source": "/admin",
