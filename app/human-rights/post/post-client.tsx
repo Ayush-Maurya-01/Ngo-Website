@@ -21,7 +21,21 @@ function PostContent() {
   const id = searchParams.get("id");
   const [post, setPost] = useState<BlogPost | null>(null);
   const [loading, setLoading] = useState(true);
+  const [readingProgress, setReadingProgress] = useState(0);
   const { t } = useLanguage();
+
+  // Scroll Progress logic
+  useEffect(() => {
+    const updateScroll = () => {
+      const currentScrollY = window.scrollY;
+      const scrollHeight = document.body.scrollHeight - window.innerHeight;
+      if (scrollHeight) {
+        setReadingProgress(Number((currentScrollY / scrollHeight).toFixed(2)) * 100);
+      }
+    };
+    window.addEventListener("scroll", updateScroll);
+    return () => window.removeEventListener("scroll", updateScroll);
+  }, []);
 
   useEffect(() => {
     async function fetchPost() {
@@ -79,6 +93,14 @@ function PostContent() {
 
   return (
     <article className="min-h-screen bg-white">
+      {/* Reading Progress Bar */}
+      <div className="fixed top-0 left-0 w-full h-1.5 bg-slate-100 z-50">
+        <div 
+          className="h-full bg-primary-600 transition-all duration-150 ease-out" 
+          style={{ width: `${readingProgress}%` }}
+        />
+      </div>
+
       {/* Hero Section */}
       <header className="relative pt-32 pb-20 md:pt-40 md:pb-28 bg-slate-50 overflow-hidden">
         <div className="absolute inset-0 opacity-40 bg-[radial-gradient(circle_at_100%_0%,_#e0f2fe_0%,_transparent_50%),radial-gradient(circle_at_0%_100%,_#f0f9ff_0%,_transparent_50%)]" />
@@ -110,10 +132,11 @@ function PostContent() {
       {post.image_url && (
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 -mt-12 relative z-10 mb-20 md:mb-28">
           <div className="relative aspect-[21/9] rounded-[2rem] overflow-hidden shadow-2xl ring-1 ring-slate-900/5 bg-slate-100">
-            {/* Using img instead of Image because external URLs might not be cached in next.config */}
+            {/* Using img with a reliable fallback to solve broken AI images */}
             <img 
               src={post.image_url} 
               alt={post.title}
+              onError={(e) => { e.currentTarget.src = "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?q=80&w=2070&auto=format&fit=crop"; }}
               className="w-full h-full object-cover"
             />
           </div>
@@ -122,7 +145,7 @@ function PostContent() {
 
       {/* Content */}
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pb-32">
-        <div className="prose prose-lg md:prose-xl prose-slate max-w-none hover:prose-a:text-primary-500 prose-a:font-bold prose-headings:font-black prose-headings:tracking-tight prose-img:rounded-3xl prose-img:shadow-xl">
+        <div className="prose prose-lg md:prose-xl prose-slate max-w-none hover:prose-a:text-primary-500 prose-a:font-bold prose-headings:font-black prose-headings:tracking-tight prose-headings:text-slate-900 prose-h2:text-3xl prose-h2:border-b-2 prose-h2:border-slate-100 prose-h2:pb-4 prose-h2:mt-12 prose-h2:mb-6 prose-blockquote:border-l-4 prose-blockquote:border-primary-500 prose-blockquote:bg-primary-50/50 prose-blockquote:py-4 prose-blockquote:px-6 prose-blockquote:rounded-r-2xl prose-blockquote:not-italic prose-blockquote:font-medium prose-blockquote:text-slate-700 prose-blockquote:shadow-sm prose-li:marker:text-primary-500 prose-li:marker:font-bold prose-img:rounded-3xl prose-img:shadow-xl selection:bg-primary-100 selection:text-primary-900 drop-shadow-sm">
           <div dangerouslySetInnerHTML={{ __html: post.content }} />
         </div>
 

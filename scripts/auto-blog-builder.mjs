@@ -41,14 +41,21 @@ async function generateBlog() {
     You are an expert human rights activist and SEO blog writer for PCHR&R (Possible Centre for Human Rights & Responsibilities), a top NGO in India.
     
     Write a highly engaging, professional, and SEO-optimized blog post about: "${randomTopic}". 
-    The tone should be inspiring, informative, and perfectly suited for an NGO's audience.
+    The tone should be inspiring, authoritative, and perfectly suited for an NGO's audience.
     
-    Format the output EXACTLY as a raw JSON object string (do NOT use markdown code blocks like \`\`\`json, just output the raw JSON directly) with these exact keys:
+    CRITICAL INSTRUCTIONS FOR FORMATTING:
+    - Use EXACTLY this structure: an introductory paragraph, followed by 2-3 sections with clear <h2> headings.
+    - Include at least one <blockquote> for a powerful statement or quote.
+    - Include at least one <ul> (bulleted list) summarizing key points or actionable steps.
+    - Use <strong> tags naturally to emphasize important keywords.
+    - Write at least 450 words. Do not use markdown code blocks like \`\`\`json, just output the raw JSON directly.
+    
+    Format the output EXACTLY as a raw JSON object string with these exact keys:
     {
-      "title": "A catchy, SEO-friendly title under 65 characters",
+      "title": "A highly attractive, click-worthy SEO title under 65 characters",
       "category": "One of: Human Rights, Education, Health, Social Awareness",
-      "read_time": "Estimated read time (e.g., '4 min read')",
-      "content": "The full article content formatted in valid HTML. Use <h2>, <p>, <ul>, <li>, and <strong> tags. Write at least 400 words. Keep it professional and inspiring."
+      "read_time": "Estimated read time (e.g., '5 min read')",
+      "content": "The full article content formatted in valid HTML with <h2>, <p>, <blockquote>, <ul>, <li>, and <strong> tags."
     }
   `;
 
@@ -72,13 +79,23 @@ async function generateBlog() {
     process.exit(1);
   }
 
-  // 3. Generate Image URL (Free AI Image via Pollinations)
-  console.log("🎨 Generating dynamic cover image...");
-  // Strip out any complex characters for the image generation prompt
-  const safeImagePrompt = blogData.title.replace(/[^a-zA-Z0-9 ]/g, " ");
-  const imagePrompt = `high quality photorealistic image, no text in image, ${safeImagePrompt}, NGO humanitarian context, cinematic lighting`;
-  const seed = Math.floor(Math.random() * 1000000); 
-  const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(imagePrompt)}?width=1200&height=630&nologo=true&seed=${seed}`;
+  // 3. Select a Guaranteed High-Quality Cover Image
+  console.log("🎨 Selecting dynamic cover image...");
+  
+  // A curated list of high-quality Unsplash images representing NGO work in India (Education, Health, Women, Rights)
+  const NGO_IMAGES = [
+    "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?q=80&w=2070&auto=format&fit=crop", // Kids education
+    "https://images.unsplash.com/photo-1532629345422-7515f3d16bb6?q=80&w=2070&auto=format&fit=crop", // Charity hands
+    "https://images.unsplash.com/photo-1509062522246-3755977927d7?q=80&w=2070&auto=format&fit=crop", // Classroom/Education
+    "https://images.unsplash.com/photo-1542810634-71277d95dcbb?q=80&w=2070&auto=format&fit=crop", // Smiley kids
+    "https://images.unsplash.com/photo-1593113646773-028c64a8f1b8?q=80&w=2070&auto=format&fit=crop", // Rural health/people
+    "https://images.unsplash.com/photo-1518398046578-8cca57782e17?q=80&w=2070&auto=format&fit=crop", // Volunteering
+    "https://images.unsplash.com/photo-1594708767771-a7502209ff51?q=80&w=2070&auto=format&fit=crop", // Women/Empowerment
+    "https://images.unsplash.com/photo-1528605248644-14dd04022da1?q=80&w=2070&auto=format&fit=crop"  // Community/Village
+  ];
+  
+  // Pick a random image from the curated list to ensure it ALWAYS loads beautifully
+  const imageUrl = NGO_IMAGES[Math.floor(Math.random() * NGO_IMAGES.length)];
 
   // 4. Insert into Supabase
   console.log("💾 Saving article to the database...");
