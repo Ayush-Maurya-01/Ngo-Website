@@ -1,0 +1,29 @@
+name: AI Auto Blog Publisher
+
+on:
+  schedule:
+    # Run every Wednesday and Sunday at 10:00 AM UTC (approx 3:30 PM IST)
+    - cron: '0 10 * * 0,3'
+  workflow_dispatch: # Allows manual trigger from GitHub UI
+
+jobs:
+  publish-blog:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run AI Blog Generator
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: node scripts/auto-blog-builder.mjs
