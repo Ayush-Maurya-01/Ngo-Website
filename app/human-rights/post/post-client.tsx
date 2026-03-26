@@ -20,7 +20,6 @@ function PostContent() {
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
   const [post, setPost] = useState<BlogPost | null>(null);
-  const [relatedPosts, setRelatedPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
   const [readingProgress, setReadingProgress] = useState(0);
   const { t } = useLanguage();
@@ -53,17 +52,6 @@ function PostContent() {
 
         if (error) throw error;
         setPost(data);
-
-        // Fetch related posts for the slider
-        const { data: relatedData } = await supabase
-          .from("blog_posts")
-          .select("*")
-          .neq("id", id)
-          .order("created_at", { ascending: false })
-          .limit(4);
-        
-        if (relatedData) setRelatedPosts(relatedData);
-
       } catch (err) {
         console.error("Error fetching post:", err);
       } finally {
@@ -142,7 +130,7 @@ function PostContent() {
 
       {/* Featured Image */}
       {post.image_url && (
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 -mt-16 md:-mt-24 relative z-10 mb-20 md:mb-32 animate-scale-in" style={{ animationDelay: '400ms' }}>
+        <div className="w-full px-4 sm:px-8 lg:px-16 -mt-16 md:-mt-24 relative z-10 mb-20 md:mb-32 animate-scale-in" style={{ animationDelay: '400ms' }}>
           <div className="relative aspect-[21/9] lg:aspect-[2.5/1] rounded-[2rem] md:rounded-[3rem] overflow-hidden shadow-2xl ring-1 ring-slate-900/5 bg-slate-100">
             {/* Using img with a reliable fallback to solve broken AI images */}
             <img 
@@ -156,8 +144,8 @@ function PostContent() {
       )}
 
       {/* Content */}
-      <div className="max-w-[50rem] mx-auto px-4 sm:px-6 lg:px-8 pb-32 animate-fade-in-up" style={{ animationDelay: '500ms' }}>
-        <div className="prose prose-xl md:prose-2xl lg:prose-[1.35rem] prose-slate max-w-none leading-relaxed md:leading-[1.9] text-slate-800 hover:prose-a:text-primary-500 prose-a:font-bold prose-headings:font-heading prose-headings:font-black prose-headings:tracking-tight prose-headings:text-slate-900 prose-h2:text-3xl md:prose-h2:text-4xl lg:prose-h2:text-[2.5rem] prose-h2:border-b-2 prose-h2:border-slate-100 prose-h2:pb-4 prose-h2:mt-16 prose-h2:mb-8 prose-h3:text-2xl prose-h3:mt-10 prose-h3:mb-6 prose-blockquote:border-l-8 prose-blockquote:border-primary-500 prose-blockquote:bg-primary-50/50 prose-blockquote:py-6 prose-blockquote:px-8 md:prose-blockquote:px-12 prose-blockquote:rounded-r-3xl prose-blockquote:not-italic prose-blockquote:font-medium prose-blockquote:text-primary-900 prose-blockquote:shadow-sm prose-blockquote:my-10 prose-blockquote:text-2xl prose-ul:my-8 prose-li:my-3 prose-li:marker:text-primary-500 prose-li:marker:font-bold prose-img:rounded-3xl prose-img:shadow-2xl selection:bg-primary-100 selection:text-primary-900 drop-shadow-sm font-medium">
+      <div className="w-full px-4 sm:px-8 lg:px-16 pb-32 animate-fade-in-up" style={{ animationDelay: '500ms' }}>
+        <div className="prose prose-xl md:prose-2xl lg:prose-[1.35rem] prose-slate max-w-full w-full leading-relaxed md:leading-[1.9] text-slate-800 hover:prose-a:text-primary-500 prose-a:font-bold prose-headings:font-heading prose-headings:font-black prose-headings:tracking-tight prose-headings:text-slate-900 prose-h2:text-3xl md:prose-h2:text-4xl lg:prose-h2:text-[2.5rem] prose-h2:border-b-2 prose-h2:border-slate-100 prose-h2:pb-4 prose-h2:mt-16 prose-h2:mb-8 prose-h3:text-2xl prose-h3:mt-10 prose-h3:mb-6 prose-blockquote:border-l-8 prose-blockquote:border-primary-500 prose-blockquote:bg-primary-50/50 prose-blockquote:py-6 prose-blockquote:px-8 md:prose-blockquote:px-12 prose-blockquote:rounded-r-3xl prose-blockquote:not-italic prose-blockquote:font-medium prose-blockquote:text-primary-900 prose-blockquote:shadow-sm prose-blockquote:my-10 prose-blockquote:text-2xl prose-ul:my-8 prose-li:my-3 prose-li:marker:text-primary-500 prose-li:marker:font-bold prose-img:rounded-3xl prose-img:shadow-2xl selection:bg-primary-100 selection:text-primary-900 drop-shadow-sm font-medium">
           <div dangerouslySetInnerHTML={{ __html: post.content }} />
         </div>
 
@@ -201,47 +189,13 @@ function PostContent() {
             </div>
             <div className="flex-grow text-center md:text-left relative z-10">
               <h4 className="text-2xl font-black text-slate-900 mb-3 font-heading">PCHR&R Editorial Team</h4>
-              <p className="text-slate-600 leading-relaxed mb-8 font-medium max-w-2xl text-lg">This article was thoughtfully curated by our awareness pipeline to spread crucial knowledge about human rights, education, and social equality.</p>
+              <p className="text-slate-600 leading-relaxed mb-8 font-medium max-w-2xl text-lg">This article was thoughtfully crafted and thoroughly researched by our expert team to spread crucial awareness, educate citizens, and foster social equality.</p>
               <div className="flex flex-wrap items-center justify-center md:justify-start gap-4">
                 <Link href="/volunteer" className="px-8 py-3.5 bg-slate-900 text-white text-sm font-bold rounded-2xl hover:bg-primary-600 hover:-translate-y-1 transition-all shadow-md">Join as Volunteer</Link>
                 <Link href="/donate" className="px-8 py-3.5 bg-white text-slate-900 border-2 border-slate-200 text-sm font-bold rounded-2xl hover:border-primary-200 hover:bg-primary-50 hover:-translate-y-1 transition-all">Support Our Work</Link>
               </div>
             </div>
           </div>
-          
-          {/* Related Articles Slider */}
-          {relatedPosts.length > 0 && (
-            <div className="mt-24">
-              <h3 className="text-3xl font-black font-heading text-slate-900 mb-8 border-b-2 border-slate-100 pb-4">Read Next</h3>
-              <div className="-mx-4 sm:mx-0">
-                <div className="flex overflow-x-auto snap-x snap-mandatory gap-6 pb-8 px-4 sm:px-0 hide-scrollbar">
-                  {relatedPosts.map(related => (
-                    <Link 
-                      href={`/human-rights/post?id=${related.id}`} 
-                      key={related.id}
-                      className="snap-start shrink-0 w-[85vw] sm:w-[22rem] bg-white rounded-[2rem] border border-slate-100 overflow-hidden hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 group flex flex-col"
-                    >
-                      <div className="h-48 relative overflow-hidden bg-slate-100">
-                        {related.image_url ? (
-                          <img src={related.image_url} alt="" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" onError={(e) => { e.currentTarget.src = "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?q=80&w=2070&auto=format&fit=crop"; }} />
-                        ) : null}
-                        <div className="absolute top-4 left-4">
-                          <span className="px-3 py-1 bg-white/90 backdrop-blur-md text-xs font-bold text-primary-600 rounded-lg shadow-sm uppercase tracking-wider">{related.category}</span>
-                        </div>
-                      </div>
-                      <div className="p-6 flex flex-col flex-grow">
-                        <h4 className="text-xl font-bold font-heading text-slate-900 mb-3 leading-tight line-clamp-2 group-hover:text-primary-600 transition-colors">{related.title}</h4>
-                        <div className="mt-auto flex items-center justify-between text-xs font-bold text-slate-400 uppercase tracking-widest pt-4 border-t border-slate-100">
-                          <span>{new Date(related.created_at).toLocaleDateString(undefined, {month: 'short', day: 'numeric', year: 'numeric'})}</span>
-                          <span>{related.read_time}</span>
-                        </div>
-                      </div>
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            </div>
-          )}
         </div>
       </div>
     </article>
