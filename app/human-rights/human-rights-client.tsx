@@ -121,7 +121,7 @@ export default function HumanRightsClient() {
                   </button>
                 )}
               </div>
-              <Link href="/blog" className="inline-flex items-center text-primary-600 font-bold group hover:text-primary-500 transition-colors whitespace-nowrap">
+              <Link href="/human-rights" className="inline-flex items-center text-primary-600 font-bold group hover:text-primary-500 transition-colors whitespace-nowrap">
                 {t("hub_view_all")}
                 <svg className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M14 5l7 7m0 0l-7 7m7-7H3" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" /></svg>
               </Link>
@@ -164,7 +164,7 @@ export default function HumanRightsClient() {
                       dangerouslySetInnerHTML={{ __html: article.content.substring(0, 200) + '...' }}
                     />
                     <div className="mt-auto">
-                      <Link href={`/blog/${article.id}`} className="inline-flex items-center text-sm font-bold text-primary-600 hover:text-primary-500 group-hover:translate-x-1 transition-all">
+                      <Link href={`/human-rights/post?id=${article.id}`} className="inline-flex items-center text-sm font-bold text-primary-600 hover:text-primary-500 group-hover:translate-x-1 transition-all">
                         {t("hub_read_more")}
                         <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" /></svg>
                       </Link>
