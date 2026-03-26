@@ -144,22 +144,57 @@ function PostContent() {
       )}
 
       {/* Content */}
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pb-32">
-        <div className="prose prose-lg md:prose-xl prose-slate max-w-none hover:prose-a:text-primary-500 prose-a:font-bold prose-headings:font-black prose-headings:tracking-tight prose-headings:text-slate-900 prose-h2:text-3xl prose-h2:border-b-2 prose-h2:border-slate-100 prose-h2:pb-4 prose-h2:mt-12 prose-h2:mb-6 prose-blockquote:border-l-4 prose-blockquote:border-primary-500 prose-blockquote:bg-primary-50/50 prose-blockquote:py-4 prose-blockquote:px-6 prose-blockquote:rounded-r-2xl prose-blockquote:not-italic prose-blockquote:font-medium prose-blockquote:text-slate-700 prose-blockquote:shadow-sm prose-li:marker:text-primary-500 prose-li:marker:font-bold prose-img:rounded-3xl prose-img:shadow-xl selection:bg-primary-100 selection:text-primary-900 drop-shadow-sm">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pb-32">
+        <div className="prose prose-xl md:prose-2xl prose-slate max-w-none leading-relaxed md:leading-loose text-slate-800 hover:prose-a:text-primary-500 prose-a:font-bold prose-headings:font-black prose-headings:tracking-tight prose-headings:text-slate-900 prose-h2:text-3xl md:prose-h2:text-4xl prose-h2:border-b-2 prose-h2:border-slate-100 prose-h2:pb-4 prose-h2:mt-16 prose-h2:mb-8 prose-h3:text-2xl prose-h3:mt-10 prose-h3:mb-6 prose-blockquote:border-l-8 prose-blockquote:border-primary-500 prose-blockquote:bg-primary-50/50 prose-blockquote:py-6 prose-blockquote:px-8 prose-blockquote:rounded-r-3xl prose-blockquote:not-italic prose-blockquote:font-medium prose-blockquote:text-slate-700 prose-blockquote:shadow-sm prose-blockquote:my-10 prose-ul:my-8 prose-li:my-3 prose-li:marker:text-primary-500 prose-li:marker:font-bold prose-img:rounded-3xl prose-img:shadow-2xl selection:bg-primary-100 selection:text-primary-900 drop-shadow-sm font-medium">
           <div dangerouslySetInnerHTML={{ __html: post.content }} />
         </div>
 
         {/* Action Bottom */}
-        <div className="mt-20 pt-10 border-t-2 border-slate-100 flex flex-col md:flex-row items-center justify-between gap-6">
-          <Link href="/human-rights" className="group inline-flex items-center text-sm font-bold text-slate-500 hover:text-primary-600 transition-colors uppercase tracking-widest">
-            <svg className="w-5 h-5 mr-3 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" /></svg>
-            Back to Articles
-          </Link>
-          <div className="flex items-center gap-4">
-             <span className="text-sm font-bold text-slate-400 uppercase tracking-widest">Share:</span>
-             <button className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-600 hover:bg-primary-50 hover:text-primary-600 transition-all border border-slate-100 shadow-sm" onClick={() => navigator.clipboard.writeText(window.location.href).then(() => alert("Link copied!"))}>
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5"/></svg>
-             </button>
+        <div className="mt-24 pt-12 border-t border-slate-200">
+          
+          {/* Tags & Share */}
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6 mb-16">
+            <Link href="/human-rights" className="group inline-flex items-center px-6 py-3 bg-slate-50 rounded-full text-sm font-bold text-slate-600 hover:bg-primary-50 hover:text-primary-600 transition-all border border-slate-100 shadow-sm uppercase tracking-widest hover:-translate-x-1">
+              <svg className="w-5 h-5 mr-3 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" /></svg>
+              Back to Articles
+            </Link>
+
+            <div className="flex items-center gap-4">
+               <span className="text-sm font-bold text-slate-400 uppercase tracking-widest hidden md:inline-block">Share:</span>
+               <button 
+                onClick={() => {
+                  if (navigator.share) {
+                    navigator.share({
+                      title: post.title,
+                      text: "Read this inspiring article on PCHR&R's Human Rights Hub!",
+                      url: window.location.href,
+                    }).catch(console.error);
+                  } else {
+                    navigator.clipboard.writeText(window.location.href).then(() => alert("Link copied to clipboard!"));
+                  }
+                }}
+                className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-primary-600 to-primary-500 text-white rounded-full font-bold hover:shadow-lg hover:shadow-primary-500/25 hover:-translate-y-0.5 transition-all w-full md:w-auto justify-center"
+               >
+                  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" /></svg>
+                  Share Article
+               </button>
+            </div>
+          </div>
+
+          {/* Author & CTA Block */}
+          <div className="bg-slate-50 rounded-3xl p-8 md:p-10 flex flex-col md:flex-row items-center gap-8 border border-slate-100 relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-primary-100 rounded-full blur-3xl -mr-32 -mt-32 opacity-50" />
+            <div className="w-24 h-24 rounded-full bg-gradient-to-br from-primary-400 to-primary-600 flex-shrink-0 flex items-center justify-center text-white shadow-xl shadow-primary-900/10">
+              <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>
+            </div>
+            <div className="flex-grow text-center md:text-left relative z-10">
+              <h4 className="text-xl font-black text-slate-900 mb-2">PCHR&R Editorial Team</h4>
+              <p className="text-slate-600 leading-relaxed mb-6 font-medium">This article was curated and generated by our automated AI awareness pipeline to spread crucial knowledge about human rights, education, and social equality.</p>
+              <div className="flex flex-wrap items-center justify-center md:justify-start gap-4">
+                <Link href="/volunteer" className="px-6 py-2 bg-slate-900 text-white text-sm font-bold rounded-xl hover:bg-primary-600 transition-colors">Join as Volunteer</Link>
+                <Link href="/donate" className="px-6 py-2 bg-white text-slate-900 border border-slate-200 text-sm font-bold rounded-xl hover:bg-slate-50 transition-colors">Support Our Work</Link>
+              </div>
+            </div>
           </div>
         </div>
       </div>
